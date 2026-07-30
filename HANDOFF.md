@@ -10,7 +10,7 @@
 |---|---|---|
 | [decisions.md](decisions.md) | ADR-лог: все архитектурные решения и обоснования | принято/пересмотрено **решение** («почему так, а не иначе») |
 | **HANDOFF.md** (этот) | статус модулей, сборка, долги, следующие шаги | изменился **статус**: что-то заработало, закрылся долг, появился новый |
-| [ENGINEERING_NOTES.md](ENGINEERING_NOTES.md) | технические находки: симптом → причина → фикс | выяснена нетривиальная **причина** бага или ограничение платформы/инструмента |
+| [ENGINEERING_NOTES.md](ENGINEERING_NOTES.md) | технические находки: симптом → причина → фикс (на английском) | выяснена нетривиальная **причина** бага или ограничение платформы/инструмента |
 | [README.md](README.md) | публичное описание проекта | меняется то, что видит внешний читатель |
 
 **Не дублируй.** Обоснование решения — только в ADR. Разбор бага — только в
@@ -119,11 +119,11 @@ python -X utf8 aggregator.py  && python -X utf8 validate_gbnf.py
 
 > ⚠️ **После правок нативной части нужен ЧИСТЫЙ пересбор** (иначе ninja переиспользует
 > старые объектники и «ничего не меняется») —
-> [ENGINEERING_NOTES §5.1](ENGINEERING_NOTES.md#51-чистый-пересбор-нативки-обязателен).
+> [ENGINEERING_NOTES §5.1](ENGINEERING_NOTES.md#51-a-clean-native-rebuild-is-mandatory).
 >
 > ⚠️ Если `./gradlew` падает с `Unable to establish loopback connection` — это ограничение
 > терминала, а не проект; есть рабочий обход для `:core` —
-> [ENGINEERING_NOTES §5.2](ENGINEERING_NOTES.md#52-gradle-не-стартует-в-терминале-ии-агента-loopback--рабочий-обход).
+> [ENGINEERING_NOTES §5.2](ENGINEERING_NOTES.md#52-gradle-fails-to-start-in-an-ai-agents-terminal-loopback--with-a-working-workaround).
 
 ## Открытые технические долги
 

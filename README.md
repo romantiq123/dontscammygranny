@@ -120,7 +120,7 @@ git submodule update --init --recursive
 > The native part (llama.cpp) is built from the submodule. After changing
 > `cpp/CMakeLists.txt` you need a **clean** rebuild — otherwise ninja reuses stale object
 > files and nothing appears to change
-> ([why](ENGINEERING_NOTES.md#51-чистый-пересбор-нативки-обязателен)).
+> ([why](ENGINEERING_NOTES.md#51-a-clean-native-rebuild-is-mandatory)).
 
 Minimum Android version: **10 (API 29)**. ABI: `arm64-v8a`.
 
@@ -148,7 +148,8 @@ verdict.gbnf             grammar for structured output
 
 ## Documentation
 
-Project documentation is written in Russian — it is the team's working language.
+[ENGINEERING_NOTES.md](ENGINEERING_NOTES.md) is in English; the rest of the project
+documentation is in Russian — the team's working language.
 
 | File | Purpose |
 |---|---|
