@@ -148,8 +148,8 @@ verdict.gbnf             grammar for structured output
 
 ## Documentation
 
-[ENGINEERING_NOTES.md](ENGINEERING_NOTES.md) is in English; the rest of the project
-documentation is in Russian — the team's working language.
+[decisions.md](decisions.md) (the ADR log) and [ENGINEERING_NOTES.md](ENGINEERING_NOTES.md)
+are in English; HANDOFF.md and app/README.md are in Russian — the team's working language.
 
 | File | Purpose |
 |---|---|
