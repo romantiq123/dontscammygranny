@@ -1,0 +1,54 @@
+# Невидимый Щит — GBNF грамматика структурированного вывода (ADR-004)
+# Совместима с llama.cpp встроенным GBNF-парсером (не требует LLGuidance/Rust).
+# Дизайн-правило: только enum/числа, без свободного текста —
+# держит парсер быстрым на слабом CPU и не даёт модели насочинять невалидное.
+# Человекочитаемые RU/KZ-формулировки — в app-коде (Aggregator, ADR-005), по code.
+#
+# ВАЖНО (найдено на устройстве 2026-07-21): парсер GBNF llama.cpp заканчивает
+# правило на ПЕРВОМ переносе строки, если оно не обёрнуто в круглые скобки.
+# Многострочные последовательности/альтернативы БЕЗ скобок молча не парсятся ->
+# llama_sampler_init_grammar возвращает nullptr -> первый sample падает сегфолтом.
+# Поэтому root держим в одну строку, а списки enum — в скобках ( ... ).
+#
+# ВАЖНО (найдено на устройстве 2026-07-22): БЕЗ пробельных правил (ws). Раньше
+# root начинался с `ws ::= [ \t\n]*`, и слабая 0.5B-модель ЗАЛИПАЛА на пробеле:
+# greedy бесконечно выбирал whitespace-токен, а `ws*` его всегда пропускал — до
+# `{` дело не доходило, на выходе оказывались 64 пробела вместо JSON. Убрали ws
+# вовсе -> грамматика форсит КОМПАКТНЫЙ JSON `{"level":...}` без пробелов: на
+# каждой структурной позиции валиден ровно один следующий символ, модель обязана
+# его выдать; выбор остаётся только на enum-значениях (это и есть классификация).
+
+root ::= "{" "\"level\":" level "," "\"confidence\":" confidence "," "\"category\":" category "," "\"reason_code\":" reason-code "}"
+
+level ::= "\"none\"" | "\"info\"" | "\"warn\"" | "\"danger\""
+
+confidence ::= (
+    "\"0.0\"" | "\"0.1\"" | "\"0.2\"" | "\"0.3\"" | "\"0.4\"" | "\"0.5\"" |
+    "\"0.6\"" | "\"0.7\"" | "\"0.8\"" | "\"0.9\"" | "\"1.0\""
+  )
+
+category ::= (
+    "\"otp_shared_request\"" |
+    "\"remote_access_install\"" |
+    "\"bank_impersonation\"" |
+    "\"urgency_pressure\"" |
+    "\"unknown_caller_action\"" |
+    "\"phishing_link\"" |
+    "\"financial_pyramid_signal\"" |
+    "\"prize_lottery_scam\"" |
+    "\"romance_scam\"" |
+    "\"none\""
+  )
+
+reason-code ::= (
+    "\"asks_otp_code\"" |
+    "\"asks_remote_access_app\"" |
+    "\"claims_bank_wrong_number\"" |
+    "\"urgency_do_not_hang_up\"" |
+    "\"urgency_act_now\"" |
+    "\"requests_money_transfer\"" |
+    "\"suspicious_link_domain\"" |
+    "\"impersonates_authority\"" |
+    "\"too_good_to_be_true\"" |
+    "\"no_signal\""
+  )

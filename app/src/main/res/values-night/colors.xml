@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- В тёмной теме — светлее, чтобы читалось на тёмной поверхности -->
+    <color name="shield_primary">#3FB597</color>
+    <color name="status_ok">#7CC47F</color>
+    <color name="status_off">#9AA0A6</color>
+</resources>

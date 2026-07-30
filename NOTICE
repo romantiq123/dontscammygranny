@@ -1,0 +1,17 @@
+Невидимый Щит (Invisible Shield)
+Copyright 2026 Nevidimyi Shchit (Invisible Shield) contributors
+
+Этот продукт распространяется на условиях Apache License 2.0 (см. файл LICENSE).
+
+Продукт включает компоненты третьих сторон, распространяемые на условиях
+собственных лицензий. Полный перечень — в THIRD-PARTY-NOTICES.md. Кратко:
+
+  * llama.cpp / ggml — MIT License.
+    Copyright (c) 2023-2026 The ggml authors.
+    Подключается как git submodule, компилируется в нативные библиотеки
+    (libllama.so, libggml*.so), которые ВХОДЯТ в состав APK.
+
+  * Qwen2.5-0.5B-Instruct (веса модели, формат GGUF) — Apache License 2.0.
+    Copyright Alibaba Cloud / Qwen team.
+    В репозиторий и в APK НЕ входят: скачиваются приложением при первом
+    запуске с Hugging Face (Qwen/Qwen2.5-0.5B-Instruct-GGUF).

@@ -1,0 +1,31 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+local.properties
+
+# CMake/NDK external native build intermediates (app/.cxx) — regenerated per
+# build, hundreds of MB of object files/ninja artifacts, never source of truth.
+.cxx/
+
+# Python
+__pycache__/
+*.pyc
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Claude
+.claude/
+
+# LLM-модель (ADR-002/003): больше не бандлится в assets — качается с HuggingFace
+# при первом запуске (LlamaCppExecutor.MODEL_URL). Правило на всякий случай
+# оставлено — GitHub блокирует пуш файлов больше 100 МБ без Git LFS, а модель
+# заметно больше, если кто-то по привычке положит .gguf обратно в assets.
+app/src/main/assets/models/*.gguf
+
+# Собранные APK, выкачанные локально из CI-артефактов (не исходники, десятки МБ).
+apk-out/
+*.apk

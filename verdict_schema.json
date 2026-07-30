@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "НевидимыйЩитVerdict",
+  "description": "Схема структурированного вывода LLM-слоя (ADR-004). Только enum/числа — без свободного текста. Человекочитаемые RU/KZ-формулировки живут в коде (Aggregator, ADR-005) как шаблоны, привязанные к category+reason_code.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["level", "confidence", "category", "reason_code"],
+  "properties": {
+    "level": {
+      "type": "string",
+      "enum": ["none", "info", "warn", "danger"],
+      "description": "Совпадает с Level в call_detect.py — единая шкала для звонков и сообщений."
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["0.0", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0"],
+      "description": "Дискретизировано до 1 знака. Свободный float в грамматике не нужен и дороже парсить."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "otp_shared_request",
+        "remote_access_install",
+        "bank_impersonation",
+        "urgency_pressure",
+        "unknown_caller_action",
+        "phishing_link",
+        "financial_pyramid_signal",
+        "prize_lottery_scam",
+        "romance_scam",
+        "none"
+      ],
+      "description": "Категория сигнала. Первые 5 приходят из regex/событийного слоя (ADR-007, ADR-011) как контекст в промпт; LLM либо подтверждает, либо переклассифицирует по тексту."
+    },
+    "reason_code": {
+      "type": "string",
+      "enum": [
+        "asks_otp_code",
+        "asks_remote_access_app",
+        "claims_bank_wrong_number",
+        "urgency_do_not_hang_up",
+        "urgency_act_now",
+        "requests_money_transfer",
+        "suspicious_link_domain",
+        "impersonates_authority",
+        "too_good_to_be_true",
+        "no_signal"
+      ],
+      "description": "Код причины. Маппинг code -> локализованная строка RU/KZ живёт в app-коде, не в модели."
+    }
+  }
+}

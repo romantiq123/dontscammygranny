@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFFFF</color>
+    <!-- Брендовый цвет: спокойный тёплый зелёный «щит/безопасность» -->
+    <color name="shield_primary">#1F8A70</color>
+    <color name="shield_primary_dark">#126B55</color>
+    <!-- Статусы доступов -->
+    <color name="status_ok">#2E7D32</color>
+    <color name="status_ok_dark">#7CC47F</color>
+    <color name="status_off">#9AA0A6</color>
+</resources>

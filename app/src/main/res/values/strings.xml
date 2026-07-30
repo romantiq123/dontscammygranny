@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Невидимый Щит</string>
+    <string name="onboarding_intro">Защита от телефонного мошенничества. Включите доступы ниже — это специальные разрешения, их нужно выдать вручную.</string>
+
+    <string name="section_access">Необходимые доступы</string>
+    <string name="section_check">Проверка работы</string>
+    <string name="section_diagnostics">Диагностика</string>
+    <string name="action_enable">Включить</string>
+
+    <string name="grant_notifications">Доступ к уведомлениям</string>
+    <string name="grant_call_role">Экран вызовов</string>
+    <string name="grant_usage">Статистика использования</string>
+    <string name="grant_contacts">Контакты</string>
+    <string name="grant_post_notif">Показ уведомлений</string>
+    <string name="grant_phone_state">Состояние звонка</string>
+    <string name="run_demo">Проверить на примере</string>
+    <string name="show_log">Показать лог</string>
+
+    <string name="section_model">Модель ИИ</string>
+    <string name="model_title">Языковая модель (~380 МБ)</string>
+    <string name="model_download">Скачать</string>
+    <string name="model_retry">Повторить</string>
+    <string name="model_consent_hint">Модель ~491 МБ скачивается с huggingface.co один раз. Работает офлайн, ничего не передаёт. Без нажатия «Скачать» загрузка не начнётся.</string>
+    <string name="model_wifi_only">Скачивать только по Wi-Fi</string>
+
+    <string name="section_watched">Наблюдение за приложениями</string>
+    <string name="watched_title">Приложения под наблюдением</string>
+    <string name="watched_hint">Если во время подозрительного звонка открыть отмеченное приложение — придёт предупреждение.</string>
+    <string name="action_configure">Настроить</string>
+</resources>

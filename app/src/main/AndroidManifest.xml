@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Видимость установленных приложений (Android 11+): нужно, чтобы показать
+         пользователю список запускаемых приложений для выбора «под наблюдение»
+         (MainActivity.installedLaunchableApps). Только запускаемые, без QUERY_ALL_PACKAGES. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+
+    <!-- ADR-008: event-driven shortService, поднимается только на время обработки события -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- ADR-011: UsageStats — легальное спец-разрешение (не Play-блок), онбординг-запрос отдельным экраном -->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- ADR-011: известные контакты -> известный номер = тишина -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!-- ADR-011 (#6): точный конец сотового звонка (TelephonyCallback CALL_STATE_IDLE)
+         -> закрыть окно риска сразу, а не по таймауту. Без него — прежний таймаут. -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!--
+      ADR-002/003/006: LLM-модель (~491 МБ) НЕ вшита в APK — качается один раз
+      ПОСЛЕ явного согласия пользователя (кнопка «Скачать», ModelPrefs; по
+      умолчанию только по Wi-Fi), чтобы не раздувать установочный файл.
+      Это единственное место в офлайн-ядре, которому нужна сеть — сам детект
+      (Atomizer/Planner/Aggregator/LLM-инференс) после скачивания работает без
+      сети. Не путать с онлайн-слоем ADR-006 (пуш родственнику и т.п.) — это
+      отдельная, ещё не реализованная, opt-in часть.
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Проверка типа сети для режима «скачивать модель только по Wi-Fi» (ModelPrefs). -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- ADR-013: полноэкранный алерт + вибро (НЕ SYSTEM_ALERT_WINDOW — см. ADR-013 why) -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:name=".ShieldApp"
+        android:label="@string/app_name"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:theme="@style/Theme.Shield"
+        android:allowBackup="false">
+
+        <!-- Онбординг-экран: статус доступов + запуск демо-проверки. -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Отдельный экран диагностического лога (для тестинга). -->
+        <activity
+            android:name=".ui.LogActivity"
+            android:exported="false"
+            android:label="Лог"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <!--
+          ADR-001/007/012: первичный канал захвата текста (SMS/мессенджеры).
+          Требует ручного включения пользователем: Settings > Notification access.
+          НЕ Accessibility (см. ADR-001 why).
+        -->
+        <service
+            android:name=".notification.ShieldNotificationListenerService"
+            android:exported="true"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!--
+          ADR-011: звонковый канал через ROLE_CALL_SCREENING (не дефолтный "Телефон").
+          onScreenCall() обязан вызвать respondToCall() в течение 5с (ADR-011 "проверено").
+        -->
+        <service
+            android:name=".callscreening.ShieldCallScreeningService"
+            android:exported="true"
+            android:permission="android.permission.BIND_SCREENING_SERVICE">
+            <intent-filter>
+                <action android:name="android.telecom.CallScreeningService" />
+            </intent-filter>
+        </service>
+
+        <!--
+          ADR-011: PACKAGE_ADDED — детект установки remote-access приложений
+          (AnyDesk/TeamViewer/RustDesk и т.п., см. core.atomizer.REMOTE_ACCESS_PKGS).
+        -->
+        <receiver
+            android:name=".pipeline.PackageAddedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <!--
+          ADR-008: shortService FGS, поднимается только на время прогона пайплайна
+          (Atomizer->Planner->Executor->Aggregator) и вызывает stopSelf().
+          foregroundServiceType="shortService" требует targetSdk 34 (Android 14+);
+          поведение на более старых OS — TODO проверить на билде (ADR-008 блокеры).
+        -->
+        <service
+            android:name=".pipeline.ShieldPipelineForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="shortService" />
+
+    </application>
+</manifest>
