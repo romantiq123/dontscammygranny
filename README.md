@@ -90,7 +90,8 @@ on-device LLM classification are confirmed working on-device.
 | Text capture (NLS), calls (CallScreening), package installs | ✅ verified on device |
 | Messenger (VoIP) call detection | ✅ verified on device |
 | On-device LLM (llama.cpp + GBNF) | ✅ content-aware verdicts confirmed on device |
-| Verdict cache, contacts, precise call-end, download consent UX | 🟡 implemented and compiling, on-device verification pending |
+| Verdict cache, contacts allowlist, precise call-end | ✅ verified on device |
+| Watched-app detection, model-download consent UX | 🟡 implemented and compiling, on-device verification pending |
 | Model benchmark on reference device (ADR-002/003) | ⏳ open blocker for final model choice |
 | Accessible output: TTS, full-screen alert (ADR-013) | ⏳ not implemented |
 | Online layer (notifying a relative) | 📋 roadmap, out of scope for v1 |
