@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Невидимый Щит</string>
     <string name="onboarding_intro">Защита от телефонного мошенничества. Включите доступы ниже — это специальные разрешения, их нужно выдать вручную.</string>
+    <string name="status_on">✓ Включено</string>
+    <string name="status_off">Не включено</string>
+    <string name="action_done">Готово</string>
 
     <string name="section_access">Необходимые доступы</string>
     <string name="section_check">Проверка работы</string>
@@ -15,10 +18,27 @@
     <string name="grant_post_notif">Показ уведомлений</string>
     <string name="grant_phone_state">Состояние звонка</string>
     <string name="run_demo">Проверить на примере</string>
+    <string name="run_demo_hint">Покажет, как выглядит предупреждение на мошенническое сообщение.</string>
     <string name="show_log">Показать лог</string>
 
+    <!-- Зачем нужен каждый доступ: одна короткая фраза простыми словами -->
+    <string name="hint_notifications">Чтобы читать входящие SMS и сообщения и замечать обман.</string>
+    <string name="hint_call_role">Чтобы видеть, кто звонит, и предупреждать о незнакомых номерах.</string>
+    <string name="hint_post_notif">Чтобы показывать вам предупреждения.</string>
+    <string name="hint_contacts">Чтобы не беспокоить, когда звонят родные и знакомые.</string>
+    <string name="hint_phone_state">Чтобы знать, когда звонок закончился.</string>
+    <string name="hint_usage">Чтобы заметить, если во время звонка вас просят открыть банк.</string>
+
+    <!-- Сводка вверху экрана -->
+    <string name="summary_ok_title">Защита включена</string>
+    <string name="summary_ok_subtitle">Все доступы выданы. Щит работает в фоне — ничего делать не нужно.</string>
+    <string name="summary_partial_title">Защита работает не полностью</string>
+    <string name="summary_partial_subtitle">Включено %1$d из %2$d. Нажмите «Включить» на карточках ниже.</string>
+    <string name="summary_off_title">Защита выключена</string>
+    <string name="summary_off_subtitle">Включите доступы ниже — без них щит не видит сообщений и звонков.</string>
+
     <string name="section_model">Модель ИИ</string>
-    <string name="model_title">Языковая модель (~380 МБ)</string>
+    <string name="model_title">Языковая модель</string>
     <string name="model_download">Скачать</string>
     <string name="model_retry">Повторить</string>
     <string name="model_consent_hint">Модель ~491 МБ скачивается с huggingface.co один раз. Работает офлайн, ничего не передаёт. Без нажатия «Скачать» загрузка не начнётся.</string>

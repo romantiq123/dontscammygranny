@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.app.NotificationManagerCompat
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import kz.invisibleshield.app.R
@@ -236,13 +237,50 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun refreshStatus() {
-        setStatus(R.id.statusNotifications, R.id.btnNotifications, isNotificationAccessGranted())
-        setStatus(R.id.statusCallRole, R.id.btnCallRole, isCallScreeningRoleHeld())
-        setStatus(R.id.statusUsage, R.id.btnUsage, isUsageAccessGranted())
-        setStatus(R.id.statusContacts, R.id.btnContacts, isGranted(Manifest.permission.READ_CONTACTS))
-        setStatus(R.id.statusPostNotif, R.id.btnPostNotif, isPostNotifGranted())
-        setStatus(R.id.statusPhoneState, R.id.btnPhoneState, isGranted(Manifest.permission.READ_PHONE_STATE))
+        val granted = listOf(
+            setStatus(R.id.statusNotifications, R.id.btnNotifications, isNotificationAccessGranted()),
+            setStatus(R.id.statusCallRole, R.id.btnCallRole, isCallScreeningRoleHeld()),
+            setStatus(R.id.statusUsage, R.id.btnUsage, isUsageAccessGranted()),
+            setStatus(R.id.statusContacts, R.id.btnContacts, isGranted(Manifest.permission.READ_CONTACTS)),
+            setStatus(R.id.statusPostNotif, R.id.btnPostNotif, isPostNotifGranted()),
+            setStatus(R.id.statusPhoneState, R.id.btnPhoneState, isGranted(Manifest.permission.READ_PHONE_STATE)),
+        )
+        updateSummary(granted.count { it }, granted.size)
         updateWatchedStatus()
+    }
+
+    /**
+     * Сводный баннер вверху: пожилому пользователю нужен один ответ «я защищён или нет»,
+     * а не разбор шести карточек. Зелёный — всё выдано, янтарный — частично, красный —
+     * ничего.
+     */
+    private fun updateSummary(grantedCount: Int, total: Int) {
+        val card = findViewById<MaterialCardView>(R.id.cardSummary)
+        val title = findViewById<TextView>(R.id.textSummaryTitle)
+        val subtitle = findViewById<TextView>(R.id.textSummarySubtitle)
+        val progress = findViewById<LinearProgressIndicator>(R.id.progressSummary)
+
+        val (bg, track) = when {
+            grantedCount == total -> {
+                title.setText(R.string.summary_ok_title)
+                subtitle.setText(R.string.summary_ok_subtitle)
+                R.color.summary_ok_bg to R.color.summary_ok_track
+            }
+            grantedCount == 0 -> {
+                title.setText(R.string.summary_off_title)
+                subtitle.setText(R.string.summary_off_subtitle)
+                R.color.summary_bad_bg to R.color.summary_bad_track
+            }
+            else -> {
+                title.setText(R.string.summary_partial_title)
+                subtitle.text = getString(R.string.summary_partial_subtitle, grantedCount, total)
+                R.color.summary_warn_bg to R.color.summary_warn_track
+            }
+        }
+        card.setCardBackgroundColor(getColor(bg))
+        progress.max = total
+        progress.setProgressCompat(grantedCount, true)
+        progress.setIndicatorColor(getColor(track))
     }
 
     private data class AppItem(val pkg: String, val label: String)
@@ -298,21 +336,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /** Обновляет строку статуса карточки и подпись кнопки по факту выдачи доступа. */
-    private fun setStatus(statusViewId: Int, buttonId: Int, granted: Boolean) {
+    /**
+     * Обновляет строку статуса карточки и подпись кнопки по факту выдачи доступа.
+     * Возвращает [granted] — для подсчёта в сводном баннере.
+     */
+    private fun setStatus(statusViewId: Int, buttonId: Int, granted: Boolean): Boolean {
         val status = findViewById<TextView>(statusViewId)
         val button = findViewById<Button>(buttonId)
         if (granted) {
-            status.text = "✓ Включено"
+            status.setText(R.string.status_on)
             status.setTextColor(getColor(R.color.status_ok))
-            button.text = "Готово"
+            button.setText(R.string.action_done)
             button.isEnabled = false
         } else {
-            status.text = "Не включено"
-            status.setTextColor(getColor(R.color.status_off))
-            button.text = getString(R.string.action_enable)
+            status.setText(R.string.status_off)
+            status.setTextColor(getColor(R.color.status_warn))
+            button.setText(R.string.action_enable)
             button.isEnabled = true
         }
+        return granted
     }
 
     private fun isGranted(perm: String): Boolean =

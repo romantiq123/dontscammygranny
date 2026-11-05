@@ -4,4 +4,11 @@
     <color name="shield_primary">#3FB597</color>
     <color name="status_ok">#7CC47F</color>
     <color name="status_off">#9AA0A6</color>
+    <color name="status_warn">#FFB74D</color>
+    <color name="summary_ok_bg">#17362D</color>
+    <color name="summary_warn_bg">#3A2D15</color>
+    <color name="summary_bad_bg">#3D1E1C</color>
+    <color name="summary_ok_track">#3FB597</color>
+    <color name="summary_warn_track">#FFB74D</color>
+    <color name="summary_bad_track">#EF7A72</color>
 </resources>

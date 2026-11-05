@@ -8,4 +8,13 @@
     <color name="status_ok">#2E7D32</color>
     <color name="status_ok_dark">#7CC47F</color>
     <color name="status_off">#9AA0A6</color>
+    <!-- «Не включено» — тёплый акцент, а не серый: невыданный доступ должен бросаться в глаза -->
+    <color name="status_warn">#B25E00</color>
+    <!-- Фон сводного баннера -->
+    <color name="summary_ok_bg">#E2F3EC</color>
+    <color name="summary_warn_bg">#FFF1DC</color>
+    <color name="summary_bad_bg">#FDE7E4</color>
+    <color name="summary_ok_track">#1F8A70</color>
+    <color name="summary_warn_track">#E08A00</color>
+    <color name="summary_bad_track">#C62828</color>
 </resources>
